@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data.SqlClient;
 
 namespace UserBase.Integration.Tests
 {
@@ -14,6 +15,16 @@ namespace UserBase.Integration.Tests
         public void Can_get_connection_string_from_app_config()
         {
             Assert.That(connectionString, Is.Not.Empty);
+        }
+
+        [Test]
+        public void Can_get_user_count()
+        {
+            var repo = new UserRepository(connectionString); // refactor to use IoC
+
+            var userRecordCount = repo.GetUserRecordCount();
+
+            Assert.That(userRecordCount, Is.GreaterThan(-1));
         }
 
         [Test, Ignore("WIP")]
@@ -35,13 +46,14 @@ namespace UserBase.Integration.Tests
             // pull record count
             userRecordCount = repo.GetUserRecordCount();
 
-            Assert.That(userRecordCount, Is.GreaterThan(1));
+            Assert.That(userRecordCount, Is.GreaterThan(-1));
         }
     }
 
     public class UserRepository
     {
         public string _connectionString;
+
         public UserRepository(string connectionString)
         {
             _connectionString = connectionString;
@@ -49,15 +61,27 @@ namespace UserBase.Integration.Tests
 
         internal void CreateUser(UserRecord record)
         {
+            var connection = new SqlConnection(_connectionString);
             throw new NotImplementedException();
         }
 
-        internal int GetUserRecordCount()
+        public int GetUserRecordCount()
         {
-            throw new NotImplementedException();
+            var userRecordCount = -1;
+            var connection = new SqlConnection(_connectionString);
+
+            connection.Open();
+
+            var command = new SqlCommand("SELECT COUNT(*) FROM dbo.UserRecords");
+            command.Connection = connection;
+
+            userRecordCount = Convert.ToInt32(command.ExecuteScalar());
+
+            connection.Close();
+
+            return userRecordCount;
         }
     }
-
     public class UserRecord
     {
         public Guid Id { get; set; }
