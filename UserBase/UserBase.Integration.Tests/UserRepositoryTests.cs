@@ -8,17 +8,13 @@ namespace UserBase.Integration.Tests
     [TestFixture]
     public class UserRepositoryTests
     {
-        //odd issue - unable to read connection string from web.config
-        //postponing resolution as would be solving wrong problem for purposes of this exercise
+        readonly string connectionString = ConfigurationManager.ConnectionStrings["DBConnection"].ConnectionString;
 
-        //readonly string connectionString = ConfigurationManager.ConnectionStrings["DBConnection"].ConnectionString;
-        readonly string connectionString = @"data source=DESKTOP-RUDASU2\SQLEXPRESS;Initial Catalog=UserBase;Integrated Security=SSPI;";
-
-        //[Test]
-        //public void Can_get_connection_string_from_web_config()
-        //{
-        //    Assert.That(connectionString, Is.Not.Empty);
-        //}
+        [Test]
+        public void Can_get_connection_string_from_app_config()
+        {
+            Assert.That(connectionString, Is.Not.Empty);
+        }
 
         [Test, Ignore("WIP")]
         public void Can_insert_new_user_record()
@@ -31,8 +27,7 @@ namespace UserBase.Integration.Tests
                 LastName = "name"
             };
 
-            var repo = new UserRepository(); // refactor to use IoC
-
+            var repo = new UserRepository(connectionString); // refactor to use IoC
 
             // create record
             repo.CreateUser(record);
@@ -46,8 +41,10 @@ namespace UserBase.Integration.Tests
 
     public class UserRepository
     {
-        public UserRepository()
+        public string _connectionString;
+        public UserRepository(string connectionString)
         {
+            _connectionString = connectionString;
         }
 
         internal void CreateUser(UserRecord record)
