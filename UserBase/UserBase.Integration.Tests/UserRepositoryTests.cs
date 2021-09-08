@@ -9,25 +9,31 @@ namespace UserBase.Integration.Tests
     [TestFixture]
     public class UserRepositoryTests
     {
-        readonly string connectionString = ConfigurationManager.ConnectionStrings["DBConnection"].ConnectionString;
+        string connectionString = ConfigurationManager.ConnectionStrings["DBConnection"].ConnectionString;
+        UserRepository repo; 
 
-        [Test]
-        public void Can_get_connection_string_from_app_config()
+        [SetUp]
+        public void SetUp()
         {
-            Assert.That(connectionString, Is.Not.Empty);
+            repo = new UserRepository(connectionString); // refactor to use IoC
+            repo.TearDownTestData();
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            repo.TearDownTestData();
         }
 
         [Test]
         public void Can_get_user_count()
         {
-            var repo = new UserRepository(connectionString); // refactor to use IoC
-
             var userRecordCount = repo.GetUserRecordCount();
 
             Assert.That(userRecordCount, Is.GreaterThan(-1));
         }
 
-        [Test, Ignore("WIP")]
+        [Test]
         public void Can_insert_new_user_record()
         {
             int userRecordCount;
@@ -35,10 +41,9 @@ namespace UserBase.Integration.Tests
             var record = new UserRecord()
             {
                 FirstName = "test",
-                LastName = "name"
+                LastName = "name",
+                Email = "test@testmail.com"
             };
-
-            var repo = new UserRepository(connectionString); // refactor to use IoC
 
             // create record
             repo.CreateUser(record);
@@ -46,7 +51,7 @@ namespace UserBase.Integration.Tests
             // pull record count
             userRecordCount = repo.GetUserRecordCount();
 
-            Assert.That(userRecordCount, Is.GreaterThan(-1));
+            Assert.That(userRecordCount, Is.GreaterThan(0));
         }
     }
 
@@ -59,10 +64,36 @@ namespace UserBase.Integration.Tests
             _connectionString = connectionString;
         }
 
-        internal void CreateUser(UserRecord record)
+        public void CreateUser(UserRecord record)
         {
-            var connection = new SqlConnection(_connectionString);
-            throw new NotImplementedException();
+            //ID and DateRegistered field population is offloaded to the DB
+
+            var commandText = $"INSERT INTO UserRecords (FirstName, LastName, Email) " +
+                $"VALUES ('{record.FirstName}','{record.LastName}','{record.Email}')"; 
+
+            using (var connection = new SqlConnection(_connectionString))
+            using (var command = new SqlCommand(commandText))
+            {
+                connection.Open();
+                command.Connection = connection;
+
+                command.ExecuteNonQuery();
+            }
+
+        }
+
+        public void TearDownTestData()
+        {
+            var commandText = $"DELETE FROM UserRecords WHERE FirstName = 'test'";
+
+            using (var connection = new SqlConnection(_connectionString))
+            using (var command = new SqlCommand(commandText))
+            {
+                connection.Open();
+                command.Connection = connection;
+
+                command.ExecuteNonQuery();
+            }
         }
 
         public int GetUserRecordCount()
@@ -80,13 +111,17 @@ namespace UserBase.Integration.Tests
 
             return userRecordCount;
         }
+
+
     }
+     
     public class UserRecord
     {
         public Guid Id { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
         public DateTime DateRegistered { get; set; }
 
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Email { get; set; }
     }
 }
