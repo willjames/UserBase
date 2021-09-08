@@ -68,16 +68,15 @@ namespace UserBase.Integration.Tests
         public int GetUserRecordCount()
         {
             var userRecordCount = -1;
-            var connection = new SqlConnection(_connectionString);
 
-            connection.Open();
+            using (var connection = new SqlConnection(_connectionString))
+            using(var command = new SqlCommand("SELECT COUNT(*) FROM dbo.UserRecords"))
+            {
+                connection.Open();
+                command.Connection = connection;
 
-            var command = new SqlCommand("SELECT COUNT(*) FROM dbo.UserRecords");
-            command.Connection = connection;
-
-            userRecordCount = Convert.ToInt32(command.ExecuteScalar());
-
-            connection.Close();
+                userRecordCount = Convert.ToInt32(command.ExecuteScalar());
+            }
 
             return userRecordCount;
         }
