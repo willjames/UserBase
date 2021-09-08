@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -8,6 +9,11 @@ namespace UserBase.Features.User
     public class UserRepository
     {
         public string _connectionString;
+
+        public UserRepository()
+        {
+            _connectionString = ConfigurationManager.ConnectionStrings["DBConnection"].ConnectionString;
+        }
 
         public UserRepository(string connectionString)
         {

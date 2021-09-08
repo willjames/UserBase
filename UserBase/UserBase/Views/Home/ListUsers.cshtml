@@ -1,0 +1,18 @@
+﻿@model UserBase.Models.UserModel;
+@using UserBase.Models;
+
+@{
+    ViewBag.Title = "UserBase";
+}
+
+<div class="jumbotron">
+    <h1>UserBase - list users</h1>
+    <p class="lead">Here is a list of users.</p>
+
+    @{ 
+    foreach(var user in Model.userRecords) 
+        {
+        <p>First Name: @Html.DisplayFor(x => user.FirstName)</p>
+        }
+    }
+</div>
