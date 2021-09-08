@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
 using System.Data.SqlClient;
 
 namespace UserBase.Integration.Tests
@@ -37,21 +38,40 @@ namespace UserBase.Integration.Tests
         public void Can_insert_new_user_record()
         {
             int userRecordCount;
-
-            var record = new UserRecord()
-            {
-                FirstName = "test",
-                LastName = "name",
-                Email = "test@testmail.com"
-            };
+            var testUserRecord = GetTestUserRecord();
 
             // create record
-            repo.CreateUser(record);
+            repo.CreateUser(testUserRecord);
 
             // pull record count
             userRecordCount = repo.GetUserRecordCount();
 
             Assert.That(userRecordCount, Is.GreaterThan(0));
+        }
+
+        [Test]
+        public void Can_get_user_records()
+        {
+            const int expectedRecordCount = 1;
+            var testUserRecord = GetTestUserRecord();
+
+            // create record
+            repo.CreateUser(testUserRecord);
+
+            //get records from DB
+            var userRecords = repo.GetAllUserRecords();//would use slice for large data set
+
+            Assert.That(userRecords.Count, Is.EqualTo(expectedRecordCount));
+        }
+
+        private static UserRecord GetTestUserRecord()
+        {
+            return new UserRecord()
+            {
+                FirstName = "test",
+                LastName = "name",
+                Email = "test@testmail.com"
+            };
         }
     }
 
@@ -112,7 +132,43 @@ namespace UserBase.Integration.Tests
             return userRecordCount;
         }
 
+        public List<UserRecord> GetAllUserRecords()
+        {
+            var recordList = new List<UserRecord>();
 
+            var commandText = $"SELECT Id, FirstName, LastName, Email, DateRegistered FROM UserRecords";
+
+            using (var connection = new SqlConnection(_connectionString))
+            using (var command = new SqlCommand(commandText))
+            {
+                connection.Open();
+                command.Connection = connection;
+
+                //command.ExecuteNonQuery();
+                DataTable userRecordTable = new DataTable();
+
+                using (SqlDataAdapter adapter = new SqlDataAdapter(command))
+                {
+                    adapter.Fill(userRecordTable);
+
+                    foreach (DataRow row in userRecordTable.Rows)
+                    {
+                        var record = new UserRecord
+                        {
+                            Id = new Guid(row["Id"].ToString()),
+                            FirstName = row["FirstName"].ToString(),
+                            LastName = row["LastName"].ToString(),
+                            Email = row["Email"].ToString(),
+                            DateRegistered = Convert.ToDateTime(row["DateRegistered"].ToString()),
+                        };
+
+                        recordList.Add(record);
+                    }
+                }
+            }
+
+            return recordList;
+        }
     }
      
     public class UserRecord
