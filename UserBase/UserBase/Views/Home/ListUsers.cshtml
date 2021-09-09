@@ -9,9 +9,24 @@
     <h1>List Users</h1>
     <p class="lead">Here is a list of users.</p>
 
-    @{ foreach(var user in Model.userRecords) 
-        {
-        <p>@Html.DisplayFor(x => user.FirstName) @Html.DisplayFor(x => user.LastName)</p>
+    <table class="table">
+        <thead>
+            <tr>
+                <td>First Name</td>
+                <td>Last Name</td>
+                <td>Email</td>
+                <td>Date registered</td>
+            </tr>
+        </thead>
+
+        @{ foreach(var user in Model.userRecords) {
+            <tr>
+                <td>@Html.DisplayFor(x => user.FirstName) </td>
+                <td>@Html.DisplayFor(x => user.LastName) </td>
+                <td>@Html.DisplayFor(x => user.Email) </td>
+                <td>@Html.DisplayFor(x => user.DateRegistered)</td>
+            </tr>
         }
-    }
+        }
+    </table>
 </div>
