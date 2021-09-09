@@ -6,11 +6,19 @@
 }
 
 <div class="jumbotron">
-    <h1>UserBase - add user</h1>
+    <h1>Add User</h1>
     <p class="lead">Add a user using the form below.</p>
 
     @using (Html.BeginForm())
     {
-        @Html.LabelFor(model => model.userRecord.FirstName)
+        <div>@Html.LabelFor(model => model.userRecord.FirstName, "First Name")</div>
+        <div>@Html.TextBoxFor(model => model.userRecord.FirstName)</div>
+
+        <div>@Html.LabelFor(model => model.userRecord.LastName, "Last Name")</div>
+        <div>@Html.TextBoxFor(model => model.userRecord.LastName)</div>
+
+        <div>@Html.LabelFor(model => model.userRecord.Email, "Email")</div>
+        <div>@Html.TextBoxFor(model => model.userRecord.Email)</div>
+
     }
 </div>

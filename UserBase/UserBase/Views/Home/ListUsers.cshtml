@@ -6,10 +6,10 @@
 }
 
 <div class="jumbotron">
-    <h1>UserBase - list users</h1>
+    <h1>List Users</h1>
     <p class="lead">Here is a list of users.</p>
 
-    @{  foreach(var user in Model.userRecords) 
+    @{ foreach(var user in Model.userRecords) 
         {
         <p>@Html.DisplayFor(x => user.FirstName) @Html.DisplayFor(x => user.LastName)</p>
         }

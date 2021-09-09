@@ -25,10 +25,11 @@ namespace UserBase.Controllers
             return View();
         }
 
-        //public ActionResult AddUser(UserModel model)
-        //{
-        //    return View(model);
-        //}
+        [HttpPost]
+        public ActionResult AddUser(UserModel model)
+        {
+            return View(model);
+        }
 
         public ActionResult ListUsers()
         {
