@@ -13,6 +13,7 @@ namespace UserBase.Features.User
         public UserRepository()
         {
             _connectionString = ConfigurationManager.ConnectionStrings["DBConnection"].ConnectionString;
+
         }
 
         public UserRepository(string connectionString)

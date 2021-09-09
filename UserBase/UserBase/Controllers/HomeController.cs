@@ -22,12 +22,20 @@ namespace UserBase.Controllers
 
         public ActionResult AddUser()
         {
+            //var model = new UserModel();
+            //return View(model);
             return View();
         }
 
         [HttpPost]
         public ActionResult AddUser(UserModel model)
         {
+            var userRepository = new UserRepository();
+
+            userRepository.CreateUser(model.userRecord);
+
+            model.UserCreationSuccessful = true;
+
             return View(model);
         }
 

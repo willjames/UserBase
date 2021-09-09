@@ -1,5 +1,4 @@
 ﻿@model UserBase.Models.UserModel
-@using UserBase.Models
 
 @{
     ViewBag.Title = "UserBase";
@@ -7,6 +6,7 @@
 
 <div class="jumbotron">
     <h1>Add User</h1>
+
     <p class="lead">Add a user using the form below.</p>
 
     @using (Html.BeginForm())
@@ -20,5 +20,7 @@
         <div>@Html.LabelFor(model => model.userRecord.Email, "Email")</div>
         <div>@Html.TextBoxFor(model => model.userRecord.Email)</div>
 
+        <div style="margin-top:20px;"><input type="submit" value="Create user" /></div>
     }
+
 </div>

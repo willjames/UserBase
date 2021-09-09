@@ -8,7 +8,9 @@ namespace UserBase.Models
 {
     public class UserModel
     {
-        public UserRecord userRecord;
-        public List<UserRecord> userRecords;
+        public UserRecord userRecord { get; set; }
+        public List<UserRecord> userRecords { get; set; }
+
+        public bool UserCreationSuccessful { get; set; }
     }
 }
