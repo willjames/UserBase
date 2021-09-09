@@ -1,7 +1,37 @@
 ﻿@{
     ViewBag.Title = "About";
 }
-<h2>@ViewBag.Title.</h2>
-<h3>@ViewBag.Message</h3>
 
-<p>Use this area to provide additional information.</p>
+<h1>About UserBase</h1>
+
+<p>
+    As a software engineer<br />
+    I want to create a data-driven website<br />
+    So that I have a open source ready reference to exhibit my skills
+</p>
+<h2>Vision</h2>
+<p>
+    The initial goal was to deliver a functional system as quickly as possible, with a view to refining and extending the system on an ongoing basis. I selected ASP.Net/C# MVC 5 with SQL Server DB and Bootstrap, as this is the tech stack I have most experience with.
+</p>
+<p>
+    The envisaged build sequence was as follows:
+    <ol>
+        <li>Create new Git repository on GitHub and pull to local machine</li>
+        <li>Select File > New Project in Visual Studio to create a new application</li>
+        <li>Build this new blank solution and push to GitHub to establish working source control</li>
+        <li>Create a new database in SQL Server for the new application to use</li>
+        <li>Establish a connection between the application and the database</li>
+        <li>Test-drive the creation of a simple UserRepository with NUnit, creating business objects as required</li>
+        <li>Create views and controller methods to enable user creation and listing users</li>
+    </ol>
+</p>
+<h2>Next steps</h2>
+<p>
+    <ol>
+        <li>Introduce dependency injection, likely with StructureMap</li>
+        <li>Convert DAL to use stored procedures instead of inline SQL, to mitigate possibility of injection attack</li>
+        <li>Establish an internal API as a wrapper for the repository methods to enable responsive UI (e.g. React or similar)</li>
+        <li>Implement responsive UI</li>
+    </ol>
+</p>
+<p>This document last edited on 9/9/21</p>
