@@ -1,5 +1,5 @@
-﻿@model UserBase.Models.UserModel;
-@using UserBase.Models;
+﻿@model UserBase.Models.UserModel
+@using UserBase.Models
 
 @{
     ViewBag.Title = "UserBase";
@@ -9,10 +9,9 @@
     <h1>UserBase - list users</h1>
     <p class="lead">Here is a list of users.</p>
 
-    @{ 
-    foreach(var user in Model.userRecords) 
+    @{  foreach(var user in Model.userRecords) 
         {
-        <p>First Name: @Html.DisplayFor(x => user.FirstName)</p>
+        <p>@Html.DisplayFor(x => user.FirstName) @Html.DisplayFor(x => user.LastName)</p>
         }
     }
 </div>

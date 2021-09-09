@@ -1,0 +1,16 @@
+﻿@model UserBase.Models.UserModel
+@using UserBase.Models
+
+@{
+    ViewBag.Title = "UserBase";
+}
+
+<div class="jumbotron">
+    <h1>UserBase - add user</h1>
+    <p class="lead">Add a user using the form below.</p>
+
+    @using (Html.BeginForm())
+    {
+        @Html.LabelFor(model => model.userRecord.FirstName)
+    }
+</div>
