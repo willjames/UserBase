@@ -49,7 +49,6 @@ namespace UserBase.Integration.Tests
         [Test]
         public void Can_get_user_records()
         {
-            const int expectedRecordCount = 1;
             var testUserRecord = GetTestUserRecord();
 
             // create record
@@ -58,7 +57,7 @@ namespace UserBase.Integration.Tests
             //get records from DB
             var userRecords = repo.GetAllUserRecords();//would use slice for large data set
 
-            Assert.That(userRecords.Count, Is.EqualTo(expectedRecordCount));
+            Assert.That(userRecords.Count, Is.GreaterThan(0));
         }
 
         private static UserRecord GetTestUserRecord()
